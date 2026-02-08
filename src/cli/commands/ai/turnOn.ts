@@ -1,36 +1,13 @@
 import chalk from "chalk";
 import { Command } from "commander";
-import yoctoSpinner from "yocto-spinner";
-import { getStoredToken } from "../auth/token";
 import { select } from "@clack/prompts";
-import { findFirst } from "../../../service/user.service";
 import { PlanMode } from "../../chat/plan-mode";
 import { ReviewMode } from "../../chat/review-mode";
-import { PhasesMode } from "../../chat/phases-mode";
 
 
 
 const wakeUpAction = async () => {
-    // const token = await getStoredToken();
-
-    // if (!token?.access_token) {
-    //     console.log(chalk.red("Not authenticated. Please login."));
-    //     return;
-    // }
-
-    // const spinner = yoctoSpinner({ text: "Fetching User Information..." });
-    // spinner.start();
-
-    // const user = await findFirst(token?.access_token);
-
-    // spinner.stop();
-
-    // if (!user) {
-    //     console.log(chalk.red("User not found."));
-    //     return;
-    // }
-
-    // console.log(chalk.green(`\nWelcome back, ${user.name}!\n`));
+   
      console.log(chalk.green(`\nHello 👋🏽!\n`));
 
     const choice = await select({
@@ -61,9 +38,9 @@ const wakeUpAction = async () => {
         case "Review Mode":
             await ReviewMode();
             break;
-        case "Phases Mode":
-            await PhasesMode();
-            break;
+        // case "Phases Mode":
+        //     await PhasesMode();
+        //     break;
     }
 };
 
