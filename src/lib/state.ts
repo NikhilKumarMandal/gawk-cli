@@ -1,0 +1,72 @@
+import { Annotation, MessagesAnnotation } from "@langchain/langgraph";
+import z from "zod";
+
+export const planGraphState = Annotation.Root({
+    ...MessagesAnnotation.spec,
+
+    approved: Annotation<boolean | undefined>(),
+    retryCount: Annotation<number>(),
+    approvedPlan: Annotation<boolean | undefined>(),
+    approvedVerification: Annotation<boolean | undefined>(),
+    approvedRetry: Annotation<boolean | undefined>(),
+
+    plan: Annotation<string>(),
+    verification: Annotation<string>(),
+});
+
+
+export const reviewGraphState = Annotation.Root({
+    ...MessagesAnnotation.spec,
+
+    analysis: Annotation<string>(),
+    findIssue: Annotation<string>(),
+    generateReport: Annotation<string>(),
+    approved: Annotation<boolean | undefined>(),
+});
+
+export const yoloGraphState = Annotation.Root({
+    ...MessagesAnnotation.spec,
+
+    intentStatus: Annotation<"CLEAR" | "NEEDS_CLARIFICATION">(),
+    userQuery: Annotation<string>(),
+    phases: Annotation<string[]>(),
+    currentPhaseIndex: Annotation<number>(),
+    completedPhases: Annotation<number[]>(),
+    phasePlan: Annotation<string>(),
+    implementation: Annotation<string>(),
+    questions: Annotation<string>(),
+    reVerificationDecision: Annotation<string>(),
+    reVerificationAttempts: Annotation<number>(),
+    done: Annotation<boolean>(),
+    verification: Annotation<string>(),
+});
+
+export type GraphState = typeof planGraphState.State;
+
+
+
+
+export const ReviewCommentSchema = z.object({
+    reasoning: z
+        .string()
+        .describe("Why this issue belongs to this category"),
+    comment: z
+        .string()
+        .describe("Concrete, actionable review comment"),
+});
+
+export const CodeReviewSchema = z.object({
+    Bug: z
+        .array(ReviewCommentSchema)
+        .describe("Logical errors, incorrect behavior, edge cases, crashes"),
+    Performance: z
+        .array(ReviewCommentSchema)
+        .describe("Efficiency, scalability, memory, unnecessary computation"),
+    Security: z
+        .array(ReviewCommentSchema)
+        .describe("Vulnerabilities, secrets, unsafe patterns, attack surfaces"),
+    Clarity: z
+        .array(ReviewCommentSchema)
+        .describe("Readability, maintainability, naming, structure"),
+});
+
